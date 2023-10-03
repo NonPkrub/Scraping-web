@@ -9,7 +9,6 @@ const routes = [
       {
         path: "display",
         component: () => import("pages/DataDisplay.vue"),
-        props: (route) => ({ inputData: route.params.inputData }),
       },
     ],
   },
