@@ -4,13 +4,6 @@
       <div class="text-h6 text-bold text-white">Display Scraped Data</div>
     </div>
     <q-card class="my-card backdrop-blur-md">
-      <div v-if="$route.params.inputData">
-        <ul>
-          <li v-for="(item, index) in $route.params.inputData" :key="index">
-            {{ item }}
-          </li>
-        </ul>
-      </div>
       <div class="card-body">
         <apexchart
           ref="chart"
@@ -59,11 +52,6 @@ export default {
       const inputData = this.$route.query.inputData;
       console.log(inputData);
     },
-  },
-  mounted() {
-    // Log the inputData parameter to the console
-    this.inputData = this.$route.params.inputData || [];
-    console.log("Input Data:", this.inputData);
   },
 };
 </script>
