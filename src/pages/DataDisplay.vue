@@ -6,16 +6,21 @@
     <q-card class="my-card backdrop-blur-md">
       <div class="card-body">
         <apexchart
-          ref="chart"
-          :options="chartOptions"
-          :series="chartData"
+          width="500"
           type="line"
-        />
+          :options="chartOptions"
+          :series="chartSeries"
+        ></apexchart>
       </div>
-      <q-card-section>
-        <div class="text-h6">Upload Config File</div>
-      </q-card-section>
     </q-card>
+    <!-- <div>
+      <apexchart
+        width="500"
+        type="line"
+        :options="chartOptions"
+        :series="chartSeries"
+      ></apexchart>
+    </div> -->
     <div class="button">
       <q-btn class="btn" @click="back" label="Back" />
     </div>
@@ -23,7 +28,13 @@
 </template>
 
 <script>
+import VueApexCharts from "vue3-apexcharts";
+import { useStore } from "../stores/scraped-data"; //
+
 export default {
+  components: {
+    apexchart: VueApexCharts,
+  },
   props: {
     // inputData: {
     //   type: Array, // Adjust the type based on your data structure
@@ -32,14 +43,38 @@ export default {
     inputData: [],
   },
   data() {
+    // return {
+    //   chartOptions: {
+    //     // Configure ApexCharts options as needed
+    //   },
+    //   chartSeries: [
+    //     {
+    //       name: "Series 1",
+    //       data: this.inputData, // Pass the data to ApexCharts
+    //     },
+    //   ],
+    // };
     return {
       chartOptions: {
-        // Configure ApexCharts options as needed
+        xaxis: {
+          categories: [
+            "Saturday",
+            "Sunday",
+            "Monday",
+            "Today",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+            "Monday",
+          ],
+        },
       },
       chartSeries: [
         {
-          name: "Series 1",
-          data: this.inputData, // Pass the data to ApexCharts
+          name: "Temperature",
+          data: [66, 78, 69, 53, 42, 58, 59, 69, 69, 66],
         },
       ],
     };
@@ -48,10 +83,16 @@ export default {
     back() {
       this.$router.push("/");
     },
-    created() {
-      const inputData = this.$route.query.inputData;
-      console.log(inputData);
-    },
+  },
+  setup() {
+    const store = useStore(); // Get the Pinia store instance
+    const data1 = store.getData1;
+
+    console.log(data1);
+
+    return {
+      data1, // Expose data1 to your template or other parts of your component
+    };
   },
 };
 </script>
@@ -68,6 +109,7 @@ export default {
   flex-direction: row;
   width: 100%;
   height: 100vh;
+  padding-top: 5%;
 }
 .my-card {
   margin: 16px;

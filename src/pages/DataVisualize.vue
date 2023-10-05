@@ -20,7 +20,7 @@
         <div class="text-h6">Uploaded: {{ name1 }}</div>
       </q-card-section>
     </q-card>
-    <q-card class="my-card">
+    <!-- <q-card class="my-card">
       <q-img class="card" src="../assets/images/JSON-vs-CSV.jpg"> </q-img>
       <q-card-section>
         <div class="text-h6">Upload JSON or CSV File</div>
@@ -36,7 +36,7 @@
       <q-card-section v-if="data2">
         <div class="text-h6">Uploaded: {{ name2 }}</div>
       </q-card-section>
-    </q-card>
+    </q-card> -->
     <div class="button">
       <q-btn class="btn" @click="back" label="Back" />
       <q-btn class="btn" @click="clearInput" label="Clear" />
@@ -46,15 +46,15 @@
 </template>
 
 <script>
-import Papa from "papaparse";
+import { useStore } from "../stores/scraped-data";
 
 export default {
   data() {
     return {
       data1: null,
-      data2: null,
+      //data2: null,
       name1: null,
-      name2: null,
+      //name2: null,
     };
   },
   methods: {
@@ -87,30 +87,30 @@ export default {
       }
     },
 
-    async handleFileChange2() {
-      const selectedFile = event.target.files[0];
-      console.log("Files:", selectedFile);
-      // const files = event.target.files; // Use event.target.files to access selected files
-      if (selectedFile) {
-        const blob = new Blob([selectedFile], { type: selectedFile.type });
-        console.log("Blob:", blob);
+    // async handleFileChange2() {
+    //   const selectedFile = event.target.files[0];
+    //   console.log("Files:", selectedFile);
+    //   // const files = event.target.files; // Use event.target.files to access selected files
+    //   if (selectedFile) {
+    //     const blob = new Blob([selectedFile], { type: selectedFile.type });
+    //     console.log("Blob:", blob);
 
-        if (selectedFile.name.endsWith(".json")) {
-          const text = await this.readFileAsJson(blob);
-          // console.log(text);
-          // this.data2 = JSON.parse(text);
-          // console.log("Parsed JSON data:", this.data2);
-          // this.data2 = JSON.parse(JSON.stringify(text));
-          this.data2 = Object.values(text);
-          this.name2 = selectedFile.name;
-        } else if (selectedFile.name.endsWith(".csv")) {
-          const csvData = await this.readFileAsCsv(selectedFile);
-          console.log("Parsed CSV data:", csvData);
-          this.data2 = csvData;
-          this.name2 = selectedFile.name;
-        }
-      }
-    },
+    //     if (selectedFile.name.endsWith(".json")) {
+    //       const text = await this.readFileAsJson(blob);
+    //       // console.log(text);
+    //       // this.data2 = JSON.parse(text);
+    //       // console.log("Parsed JSON data:", this.data2);
+    //       // this.data2 = JSON.parse(JSON.stringify(text));
+    //       this.data2 = Object.values(text);
+    //       this.name2 = selectedFile.name;
+    //     } else if (selectedFile.name.endsWith(".csv")) {
+    //       const csvData = await this.readFileAsCsv(selectedFile);
+    //       console.log("Parsed CSV data:", csvData);
+    //       this.data2 = csvData;
+    //       this.name2 = selectedFile.name;
+    //     }
+    //   }
+    // },
     readFileAsJson(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -156,27 +156,30 @@ export default {
     },
     clearInput() {
       const fileInput1 = this.$refs.fileInput1;
-      const fileInput2 = this.$refs.fileInput2;
+      //const fileInput2 = this.$refs.fileInput2;
 
       if (fileInput1) {
         fileInput1.$el.querySelector('input[type="file"]').value = "";
       }
 
-      if (fileInput2) {
-        fileInput2.$el.querySelector('input[type="file"]').value = "";
-      }
+      // if (fileInput2) {
+      //   fileInput2.$el.querySelector('input[type="file"]').value = "";
+      // }
 
       // Clear both data properties
       this.data1 = null;
-      this.data2 = null;
+      //this.data2 = null;
     },
     async confirm() {
-      if (this.data1 && this.data2) {
-        const combinedData = [...this.data1, ...this.data2];
-        console.log(combinedData);
+      if (this.data1) {
+        // const combinedData = [...this.data1, ...this.data2];
+        // console.log(combinedData);
+        const store = useStore();
+
+        store.setData1(this.data1);
+
         this.$router.push({
           path: "/display",
-          params: { inputData: combinedData },
         });
       } else {
         alert("Please upload both JSON and CSV files before confirming.");

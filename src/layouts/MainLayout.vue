@@ -3,7 +3,7 @@
     <q-header elevated>
       <q-toolbar class="bg-green">
         <q-toolbar-title>
-          Data Scrape Website Case Study: Air quality
+          ☁️ Data Scrape Website Case Study: Air quality 🌥️
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
