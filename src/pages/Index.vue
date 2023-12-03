@@ -6,10 +6,9 @@
       </div>
     </div>
     <div class="case-1">
-      <div class="text-h6 text-bold text-white">Step1: Scraping Engine</div>
-      <div class="text-h6 text-bold text-white">
-        Step2: Scraped Data Visualize
-      </div>
+      <div class="text-h6 text-bold text-white">Scraping Engine</div>
+      <div class="text-h6 text-bold text-white">Scraped Data Visualize</div>
+      <div class="text-h6 text-bold text-white">Map Scraped Data</div>
     </div>
     <q-card class="my-card" clickable v-ripple @click="find">
       <q-img class="card" src="../assets/images/puppeteer.jpg">
@@ -25,7 +24,17 @@
         src="../assets/images/10-types-of-data-visualization-1-1024x614.jpg"
       >
         <div class="absolute-bottom">
-          <div class="text-h2 text-bold">Visualize Data</div>
+          <div class="text-h2 text-bold">Graph</div>
+        </div>
+      </q-img>
+    </q-card>
+    <q-card class="my-card" clickable v-ripple @click="map">
+      <q-img
+        class="card"
+        src="../assets/images/dm-top-database-challenges-696x457.png"
+      >
+        <div class="absolute-bottom">
+          <div class="text-h2 text-bold">Map</div>
         </div>
       </q-img>
     </q-card>
@@ -92,6 +101,9 @@ export default {
     },
     valet() {
       this.$router.push("/visual");
+    },
+    map() {
+      this.$router.push("/map");
     },
   },
 };

@@ -1,16 +1,28 @@
 <template>
   <q-layout container="true" style="background-color: black">
     <q-header elevated>
-      <q-toolbar class="bg-green">
-        <q-toolbar-title>
-          ☁️ Data Scrape Website Case Study: Air quality 🌥️
-        </q-toolbar-title>
+      <q-toolbar class="bg-green text-white shadow-2 rounded-borders">
+        <q-btn
+          @click="home"
+          flat
+          label=" ☁️ Data Scrape Website Case Study: Air quality 🌥️"
+        />
+
+        <q-space />
+        <q-btn stretch flat label="docs" @click="docs" />
       </q-toolbar>
     </q-header>
 
     <q-page-container style="padding-top: 0">
       <router-view />
     </q-page-container>
+    <q-page-scroller
+      position="bottom-right"
+      :scroll-offset="150"
+      :offset="[18, 18]"
+    >
+      <q-btn fab icon="keyboard_arrow_up" color="accent" />
+    </q-page-scroller>
   </q-layout>
 </template>
 
@@ -64,5 +76,14 @@ const linksList = [
 
 export default defineComponent({
   name: "MainLayout",
+
+  methods: {
+    docs() {
+      this.$router.push("/docs");
+    },
+    home() {
+      this.$router.push("/");
+    },
+  },
 });
 </script>

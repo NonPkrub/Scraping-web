@@ -10,9 +10,10 @@ const routes = [
         path: "display",
         component: () => import("pages/DataDisplay.vue"),
       },
+      { path: "docs", component: () => import("pages/MyDocument.vue") },
+      { path: "map", component: () => import("pages/Map.vue") },
     ],
   },
-
   // Always leave this as last one,
   // but you can also remove it
   {

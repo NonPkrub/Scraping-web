@@ -15,7 +15,9 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "apexcharts": "^3.42.0",
+    "axios": "^1.6.2",
     "csv-writer": "^1.6.0",
+    "leaflet": "^1.9.4",
     "node-cron": "^3.0.2",
     "papaparse": "^5.4.1",
     "pinia": "^2.1.6",

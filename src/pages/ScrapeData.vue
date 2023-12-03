@@ -93,59 +93,70 @@ export default {
       try {
         this.loading = true;
         const fileInput = this.data;
-        const response = await fetch("http://localhost:3000/api/scrape", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(fileInput),
-        });
-        console.log(response);
-        if (response.ok) {
-          const scrapedData = await response.json();
-          console.log("Scraping complete!");
-          console.log(scrapedData);
-          if (fileInput.format === "json") {
-            const jsonDataBlob = new Blob([JSON.stringify(scrapedData)], {
-              type: "application/json",
-            });
-            const blobUrl = URL.createObjectURL(jsonDataBlob);
-            const a = document.createElement("a");
-            a.style.display = "none";
-            a.href = blobUrl;
-            a.download = `${fileInput.filename}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(blobUrl);
-          } else if (fileInput.format === "csv") {
-            const data = scrapedData.data;
-            const header = data[0]
-              .split(",")
-              .map((value, index) => `Header${index + 1}`)
-              .join(",");
-            let csv = `${header}\n`;
-
-            for (let index = 0; index < data.length; index++) {
-              const values = data[index].split(",");
-              csv += `${values.slice(0, 5).join(",")},${values
-                .slice(6)
-                .join(",")}\n`;
-            }
-
-            const csvBlob = new Blob([csv], { type: "text/csv" });
-            const blobUrl = URL.createObjectURL(csvBlob);
-            const a = document.createElement("a");
-            a.style.display = "none";
-            a.href = blobUrl;
-            a.download = `${fileInput.filename}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(blobUrl);
-          }
+        if (fileInput === "db") {
+          const collect = await fetch("http://localhost:8080/api/config", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(fileInput),
+          });
+          console.log(collect);
         } else {
-          console.error("Error during scraping:", response.statusText);
+          const response = await fetch("http://localhost:8080/api/scrape", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(fileInput),
+          });
+          console.log(response);
+          if (response.ok) {
+            const scrapedData = await response.json();
+            console.log("Scraping complete!");
+            console.log(scrapedData);
+            if (fileInput.format === "json") {
+              const jsonDataBlob = new Blob([JSON.stringify(scrapedData)], {
+                type: "application/json",
+              });
+              const blobUrl = URL.createObjectURL(jsonDataBlob);
+              const a = document.createElement("a");
+              a.style.display = "none";
+              a.href = blobUrl;
+              a.download = `${fileInput.filename}.json`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(blobUrl);
+            } else if (fileInput.format === "csv") {
+              const data = scrapedData.data;
+              const header = data[0]
+                .split(",")
+                .map((value, index) => `Header${index + 1}`)
+                .join(",");
+              let csv = `${header}\n`;
+
+              for (let index = 0; index < data.length; index++) {
+                const values = data[index].split(",");
+                csv += `${values.slice(0, 5).join(",")},${values
+                  .slice(6)
+                  .join(",")}\n`;
+              }
+
+              const csvBlob = new Blob([csv], { type: "text/csv" });
+              const blobUrl = URL.createObjectURL(csvBlob);
+              const a = document.createElement("a");
+              a.style.display = "none";
+              a.href = blobUrl;
+              a.download = `${fileInput.filename}.csv`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(blobUrl);
+            }
+          } else {
+            console.error("Error during scraping:", response.statusText);
+          }
         }
 
         console.log("Scraping complete!");

@@ -15,28 +15,22 @@
           @change="handleFileChange1($event)"
         />
       </q-card-section>
-
       <q-card-section v-if="data1">
         <div class="text-h6">Uploaded: {{ name1 }}</div>
       </q-card-section>
-    </q-card>
-    <!-- <q-card class="my-card">
-      <q-img class="card" src="../assets/images/JSON-vs-CSV.jpg"> </q-img>
-      <q-card-section>
-        <div class="text-h6">Upload JSON or CSV File</div>
-        <q-input
-          ref="fileInput2"
-          outlined
-          type="file"
-          accept=".json, .csv"
-          @change="handleFileChange2($event)"
-        />
-      </q-card-section>
+      <div class="select">
+        <q-card-section>
+          <div class="text">X-Axis:</div>
+          <q-select v-model="xAxis" :options="xAxisOptions" outlined />
+        </q-card-section>
 
-      <q-card-section v-if="data2">
-        <div class="text-h6">Uploaded: {{ name2 }}</div>
-      </q-card-section>
-    </q-card> -->
+        <q-card-section>
+          <div class="text">Y-Axis:</div>
+          <q-select v-model="yAxis" :options="yAxisOptions" outlined />
+        </q-card-section>
+      </div>
+    </q-card>
+
     <div class="button">
       <q-btn class="btn" @click="back" label="Back" />
       <q-btn class="btn" @click="clearInput" label="Clear" />
@@ -55,6 +49,10 @@ export default {
       //data2: null,
       name1: null,
       //name2: null,
+      xAxis: null,
+      yAxis: null,
+      xAxisOptions: [],
+      yAxisOptions: [],
     };
   },
   methods: {
@@ -77,6 +75,18 @@ export default {
           console.log(Object.values(text));
           this.data1 = Object.values(text);
           // this.data1 = JSON.parse(JSON.stringify(text));
+          if (this.data1) {
+            this.xAxisOptions = Object.values(text).map((entry) => {
+              const parts = Object.values(entry)[0].split(",");
+              return { label: parts[0], value: parts[3] };
+            });
+
+            this.yAxisOptions = Object.values(text).map((entry) => {
+              const parts = Object.values(entry)[0].split(",");
+              return { label: parts[0], value: parts[6] }; // Assuming you want the 7th part (index 6)
+            });
+          }
+
           this.name1 = selectedFile.name;
         } else if (selectedFile.name.endsWith(".csv")) {
           const csvData = await this.readFileAsCsv(selectedFile);
@@ -200,7 +210,7 @@ export default {
   flex-wrap: wrap;
   flex-direction: row;
   width: 100%;
-  padding-top: 10%;
+  padding-top: 5%;
   height: 100vh;
 }
 .my-card {
@@ -244,5 +254,9 @@ export default {
 .black-theme {
   background-color: #000; /* Black background */
   color: white; /* Text color */
+}
+.select {
+  display: flex;
+  justify-content: space-around;
 }
 </style>
