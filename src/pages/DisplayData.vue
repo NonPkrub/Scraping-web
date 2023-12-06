@@ -13,6 +13,7 @@
         ></apexchart>
       </div>
     </q-card>
+
     <div class="button">
       <q-btn class="btn" @click="back" label="Back" />
     </div>
@@ -21,7 +22,7 @@
 
 <script>
 import VueApexCharts from "vue3-apexcharts";
-import { useStore } from "../stores/scraped-data";
+import { useStore } from "../stores/scraped-data"; //
 
 export default {
   components: {
@@ -30,24 +31,27 @@ export default {
   props: {
     inputData: [],
   },
+
   methods: {
     back() {
-      this.$router.push("/");
+      this.$router.push("/map");
     },
   },
-  // watch: {
-  //   data1: {
-  //     handler: "updateChart",
-  //     immediate: true,
-  //   },
-  // },
   setup() {
-    const store = useStore();
-    const data1 = store.getData1;
+    const store = useStore(); // Get the Pinia store instance
+    const data1 = store.getNewData;
 
-    const categories = data1.xAxisOptions.map((item) => item.label);
-    const seriesData = data1.yAxisOptions.map((item) => parseFloat(item.value));
-
+    console.log(data1);
+    const categories = data1.map((item) => item.day);
+    console.log(
+      "🚀 ~ file: DisplayData.vue:78 ~ setup ~ categories:",
+      categories
+    );
+    const seriesData = data1.map((item) => item.AQI);
+    console.log(
+      "🚀 ~ file: DisplayData.vue:80 ~ setup ~ seriesData:",
+      seriesData
+    );
     const chartOptions = {
       xaxis: {
         categories: categories,

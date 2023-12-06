@@ -12,6 +12,7 @@ const routes = [
       },
       { path: "docs", component: () => import("pages/MyDocument.vue") },
       { path: "map", component: () => import("pages/Map.vue") },
+      { path: "database", component: () => import("pages/DisplayData.vue") },
     ],
   },
   // Always leave this as last one,

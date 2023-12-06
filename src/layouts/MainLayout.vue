@@ -9,6 +9,7 @@
         />
 
         <q-space />
+        <q-btn stretch flat label="add map" @click="openMapDialog" />
         <q-btn stretch flat label="docs" @click="docs" />
       </q-toolbar>
     </q-header>
@@ -23,12 +24,54 @@
     >
       <q-btn fab icon="keyboard_arrow_up" color="accent" />
     </q-page-scroller>
+    <!-- Map Dialog -->
+    <q-dialog v-model="mapDialogVisible" persistent>
+      <q-card>
+        <q-card-section class="text-h6">Map Popup Content</q-card-section>
+        <q-card-section>
+          <q-input
+            v-model="formData.name"
+            outlined
+            label="Name of district"
+            dense
+            :rules="[(value) => !!value || 'Name is required']"
+          />
+          <br />
+          <q-input
+            v-model="formData.lat"
+            outlined
+            label="Latitude"
+            dense
+            :rules="[(value) => !!value || 'Latitude is required']"
+          />
+          <br />
+          <q-input
+            v-model="formData.long"
+            outlined
+            label="Longitude"
+            dense
+            :rules="[(value) => !!value || 'Longitude is required']"
+          />
+          <br />
+
+          <q-btn
+            label="Send POST Request"
+            color="secondary"
+            @click="sendPostRequest"
+            :disable="isButtonDisabled"
+          />
+        </q-card-section>
+        <q-card-actions>
+          <q-btn label="Close" color="secondary" @click="closeMapDialog" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
 <script>
 import { defineComponent, ref } from "vue";
-
+import axios from "axios";
 const linksList = [
   {
     title: "Docs",
@@ -76,13 +119,48 @@ const linksList = [
 
 export default defineComponent({
   name: "MainLayout",
-
+  data() {
+    return {
+      mapDialogVisible: false,
+      formData: {
+        name: "",
+        lat: "",
+        long: "",
+      },
+    };
+  },
+  computed: {
+    isButtonDisabled() {
+      return !this.formData.name || !this.formData.lat || !this.formData.long;
+    },
+  },
   methods: {
     docs() {
       this.$router.push("/docs");
     },
     home() {
       this.$router.push("/");
+    },
+    openMapDialog() {
+      this.mapDialogVisible = true;
+    },
+
+    closeMapDialog() {
+      this.mapDialogVisible = false;
+    },
+    async sendPostRequest() {
+      try {
+        const response = await axios.post(
+          "https://scrape-api-jcvs4udnka-as.a.run.app/api/data/district",
+          this.formData
+        );
+
+        // Handle the response as needed
+        console.log(response.data);
+      } catch (error) {
+        // Handle errors
+        console.error("Error making POST request:", error);
+      }
     },
   },
 });

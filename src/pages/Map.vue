@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="phuket-map"></div>
+    <button @click="createNewMarker">Create New Marker</button>
   </div>
 </template>
 
@@ -8,6 +9,7 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
+import { useStore } from "../stores/scraped-data";
 export default {
   name: "PhuketMap",
   data() {
@@ -26,75 +28,68 @@ export default {
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "© OpenStreetMap contributors",
       }).addTo(map);
-      // Marker for Phuket
-      // L.marker([8.032003, 98.333466])
-      //   .addTo(map)
-      //   .bindPopup("Thalang")
-      //   .openPopup();
-      // L.marker([7.91779, 98.33322]).addTo(map).bindPopup("Kathu").openPopup();
-      // L.marker([7.907632, 98.385529])
-      //   .addTo(map)
-      //   .bindPopup("Mueang Phuket")
-      //   .openPopup();
-      // // Marker for Phang Nga
-      // L.marker([8.45091, 98.52985])
-      //   .addTo(map)
-      //   .bindPopup("Mueang Phang Nga")
-      //   .openPopup();
 
-      // L.marker([7.996338, 98.594765])
-      //   .addTo(map)
-      //   .bindPopup(" Ko Yao")
-      //   .openPopup();
-
-      // L.marker([8.74139, 98.47542]).addTo(map).bindPopup("Kapong").openPopup();
-
-      // L.marker([8.28433, 98.3895])
-      //   .addTo(map)
-      //   .bindPopup("Takua Thung")
-      //   .openPopup();
-
-      // L.marker([8.87509, 98.352654])
-      //   .addTo(map)
-      //   .bindPopup("Takua Pa")
-      //   .openPopup();
-
-      // L.marker([9.223691, 98.440357])
-      //   .addTo(map)
-      //   .bindPopup("Khura Buri")
-      //   .openPopup();
-
-      // L.marker([8.53768, 98.63208])
-      //   .addTo(map)
-      //   .bindPopup("Thap Put")
-      //   .openPopup();
-
-      // L.marker([8.48995, 98.31292])
-      //   .addTo(map)
-      //   .bindPopup("Thai Mueang")
-      //   .openPopup();
       await this.fetchMarkerData();
       this.addMarkers();
     },
     async fetchMarkerData() {
       try {
-        const response = await axios.get("http://localhost:8080/api/district");
+        const response = await axios.get(
+          "https://scrape-api-jcvs4udnka-as.a.run.app/api/district"
+        );
         this.locations = response.data;
       } catch (error) {
         console.error("Error fetching marker data:", error);
       }
     },
+    createNewMarker() {
+      // Assuming you want to create a marker at the center of the map
+      // const center = this.map.getCenter();
+      // const newMarker = L.marker(center)
+      //   .addTo(this.map)
+      //   .bindPopup("New Marker")
+    },
     addMarkers() {
-      console.log(this.map);
+      const store = useStore();
       if (this.map) {
         this.locations.forEach((location) => {
-          L.marker([location.lat, location.long])
+          const marker = L.marker([location.lat, location.long])
             .addTo(this.map)
-            .bindPopup(location.name)
-            .openPopup();
+            .bindPopup(location.name);
+
+          marker.on("click", async () => {
+            const data = await this.fetchAdditionalData(location.id);
+            console.log(data);
+            store.setNewData(data);
+
+            this.$router.push("/database");
+          });
+          marker.on("mouseover", () => {
+            marker
+              .bindTooltip(location.name, {
+                permanent: true,
+                className: "custom-tooltip",
+              })
+              .openTooltip();
+          });
+
+          marker.on("mouseout", () => {
+            marker.closeTooltip();
+          });
         });
       } else {
         console.error("Map object is not initialized.");
+      }
+    },
+    async fetchAdditionalData(locationId) {
+      try {
+        const response = await axios.get(
+          `https://scrape-api-jcvs4udnka-as.a.run.app/api/data/district/${locationId}`
+        );
+        const additionalData = response.data;
+        return additionalData;
+      } catch (error) {
+        console.error("Error fetching additional data:", error);
       }
     },
   },
@@ -104,5 +99,12 @@ export default {
 <style scoped>
 #phuket-map {
   height: 100vh; /* Adjust the height as needed */
+}
+
+.custom-tooltip {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 6px;
+  border-radius: 3px;
 }
 </style>

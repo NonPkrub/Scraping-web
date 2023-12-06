@@ -11,7 +11,7 @@
       <div class="text-h6 text-bold text-white">Map Scraped Data</div>
     </div>
     <q-card class="my-card" clickable v-ripple @click="find">
-      <q-img class="card" src="../assets/images/puppeteer.jpg">
+      <q-img class="card" src="../assets/images/1_pENDNg9TGw1DeDVulIWg0g.jpg">
         <div class="absolute-bottom">
           <div class="text-h2 text-bold">Scrape Data</div>
         </div>
@@ -21,7 +21,7 @@
     <q-card class="my-card" clickable v-ripple @click="valet">
       <q-img
         class="card"
-        src="../assets/images/10-types-of-data-visualization-1-1024x614.jpg"
+        src="../assets/images/pngtree-web-banner-3d-rendered-ui-for-seo-data-analytics-and-future-image_3618751.jpg"
       >
         <div class="absolute-bottom">
           <div class="text-h2 text-bold">Graph</div>
@@ -31,7 +31,7 @@
     <q-card class="my-card" clickable v-ripple @click="map">
       <q-img
         class="card"
-        src="../assets/images/dm-top-database-challenges-696x457.png"
+        src="../assets/images/thailand-map-asia-tack-hd-wallpaper-preview.jpg"
       >
         <div class="absolute-bottom">
           <div class="text-h2 text-bold">Map</div>

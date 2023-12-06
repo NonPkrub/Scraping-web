@@ -94,22 +94,29 @@ export default {
         this.loading = true;
         const fileInput = this.data;
         if (fileInput === "db") {
-          const collect = await fetch("http://localhost:8080/api/config", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(fileInput),
-          });
+          const collect = await fetch(
+            "https://scrape-api-jcvs4udnka-as.a.run.app/api/config",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(fileInput),
+            }
+          );
           console.log(collect);
+          this.$router.push("/database");
         } else {
-          const response = await fetch("http://localhost:8080/api/scrape", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(fileInput),
-          });
+          const response = await fetch(
+            "https://scrape-api-jcvs4udnka-as.a.run.app/api/scrape",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(fileInput),
+            }
+          );
           console.log(response);
           if (response.ok) {
             const scrapedData = await response.json();
@@ -183,9 +190,9 @@ export default {
   flex-wrap: wrap;
   flex-direction: row;
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
   padding-top: 6%;
-  height: 100vh;
+  height: 115vh;
 }
 .my-card {
   margin: 16px;
